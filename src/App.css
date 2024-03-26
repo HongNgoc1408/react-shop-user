@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+
+/* body {
+  font-family: "Roboto", sans-serif;
+} */
+
+.title {
+  @apply text-3xl font-semibold capitalize text-center my-8 cursor-pointer;
+}
+
+.bg-dark-button {
+  @apply bg-Black hover:bg-orange-500 px-6 py-2 text-white font-semibold rounded-md;
+}
+
+.bg-light-button {
+  @apply px-6 py-2 bg-white text-Black hover:bg-orange-500 rounded-md font-semibold;
+}
