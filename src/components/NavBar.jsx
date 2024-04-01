@@ -3,7 +3,7 @@ import { FaBars, FaSearch, FaTimes } from "react-icons/fa";
 import logo from "/images/zara-logo-2019.png";
 import { FaUser } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,6 +19,12 @@ const NavBar = () => {
     { title: "CONTACT US", path: "/contact" },
     { title: "CAREERS", path: "/careers" },
   ];
+
+  const navigate = useNavigate()
+  const handleNavigateLogin = () => {
+    navigate('/login');
+  }
+
   return (
     <header className="max-w-screen-2xl xl:px-28 px-4 absolute top-0 right-0 left-0">
       <nav className="flex justify-between items-center container md:py-4 pt-6 pb-3">
@@ -35,15 +41,15 @@ const NavBar = () => {
         </a>
         {/* {Login and cart btn} */}
         <div className="text-lg text-Black sm:flex items-center gap-4 hidden">
-          <a
-            href="/login"
-            className="flex items-center gap-2 hover:text-orange-500"
+          <div
+            onClick={handleNavigateLogin}
+            className="flex items-center gap-2 hover:text-orange-500 cursor-pointer"
           >
             <FaUser />
-            <span className="hover:border-b-2 hover:border-b-orange-500">
+            <span className="hover:border-b-2 hover:border-b-orange-500 " >
               Login
             </span>
-          </a>
+          </div>
           <a
             href="/cart"
             className="flex items-center gap-2  hover:text-orange-500"

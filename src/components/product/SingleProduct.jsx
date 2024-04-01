@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowAltCircleRight, FaStar } from "react-icons/fa";
-
+// import { useParams } from "react-router-dom";
 
 const SingleProduct = () => {
+  // const { id } = useParams();
+  // const [products, setProducts] = useState([]);
+  // //   console.log(id);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch("/products.json");
+  //       const data = await response.json();
+  //       const product = data.filter((p) => p.id == id);
+  //       console.log(product);
+  //       setProducts(product[0]);
+  //     } catch (error) {
+  //       console.log("Error fetching data: ", error);
+  //     }
+  //   };
+  //   fetchData();
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  // }, [id]);
+  // const { title, category, price, image, status } = products;
   return (
     <div className="mt-28 max-w-screen-2xl container mx-auto xl-px-28 px-4">
       <div className="p-3 max-w-7xl m-auto">

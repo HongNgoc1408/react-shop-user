@@ -41,6 +41,7 @@ const NewLetters = () => {
           />
           <input
             type="submit"
+            value={"Submit"}
             className="bg-black text-white bg-dark-button"
           />
         </form>

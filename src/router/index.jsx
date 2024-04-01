@@ -1,8 +1,8 @@
 import Cart from "../pages/cart/Cart";
 import HomePage from "../pages/home/HomePage";
 import ProductDetails from "../pages/product/ProductDetails";
-import login from "../pages/auth/login";
-import register from "../pages/auth/register";
+import login from "../pages/auth/FormLogin";
+import register from "../pages/auth/FormRegister";
 
 const routes = [
   {
