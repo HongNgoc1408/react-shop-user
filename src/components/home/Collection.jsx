@@ -13,7 +13,7 @@ const Collection = () => {
       <div className="h-[580px] flex justify-between md:flex-row items-center">
         <div className="md:w-1/2"></div>
         <div className="md:w-1/2">
-          <img src="/public/images/zara-logo.png" alt="" />
+          <img src="/images/zara-logo.png" alt="" />
           <p className="text-lg text-white capitalize my-8 md:w-2/3 leading-[32px]">
             Transparency plays against pops of color in sweaters, pants and
             lingerie. Checks, floral prints, paillettes and patchwork deepen the

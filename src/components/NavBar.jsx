@@ -71,7 +71,7 @@ const NavBar = () => {
       <hr />
 
       {/* {Category items} */}
-      <div className="pt-4 pb-4">
+      <div className="py-4">
         <ul className="lg:flex items-center  justify-between text-Black hidden">
           {navItems.map(({ title, path }) => (
             <li
@@ -83,7 +83,6 @@ const NavBar = () => {
           ))}
         </ul>
       </div>
-      <hr />
       {/* only moblie more items */}
       <div>
         <ul

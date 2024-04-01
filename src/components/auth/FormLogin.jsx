@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-const Login = () => {
+const FormLogin = () => {
   return (
     <section className="bg-primaryBG py-12 xl:px-28 px-4">
       <div className="max-w-[555px] h-auto bg-white m-auto mt-32 px-14 py-10 rounded-md">
@@ -10,11 +9,13 @@ const Login = () => {
           <input
             type="email"
             placeholder="Email Address"
+            autoComplete="username"
             className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
           />
           <input
             type="password"
             placeholder="Password"
+            autoComplete="password"
             className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
           />
         </div>
@@ -30,9 +31,7 @@ const Login = () => {
         </div>
 
         <div className="w-full flex flex-col my-4">
-          <button className="bg-dark-button">
-            Login
-          </button>
+          <button className="bg-dark-button">Login</button>
         </div>
 
         <div className="w-full flex items-center justify-center relative py-2">
@@ -48,11 +47,11 @@ const Login = () => {
               Register
             </a>
             {/* <Link
-              to="register"
-              className="text-secondary underline cursor-pointer font-bold"
-            >
-              Register
-            </Link> */}
+            to="register"
+            className="text-secondary underline cursor-pointer font-bold"
+          >
+            Register
+          </Link> */}
           </p>
         </div>
       </div>
@@ -60,4 +59,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default FormLogin;

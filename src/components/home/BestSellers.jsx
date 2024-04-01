@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -12,14 +12,14 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 
 const BestSellers = () => {
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    fetch("products.json")
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-  }, []);
+  // const [products, setProducts] = useState([]);
+  // useEffect(() => {
+  //   fetch("products.json")
+  //     .then((res) => res.json())
+  //     .then((data) => setProducts(data));
+  // }, []);
 
-  const bestSellers = products.filter((item) => item.status === "Best Selers");
+  // const bestSellers = products.filter((item) => item.status === "Best Selers");
   // console.log(bestSellers);
 
   return (
@@ -63,26 +63,24 @@ const BestSellers = () => {
           modules={[Autoplay, Pagination, Navigation]}
           className="mySwiper"
         >
-          {bestSellers.map((products) => (
-            <SwiperSlide key={products.id}>
-              <Link to={`/shop/${products.id}`}>
-                <img
-                  src={products.image}
-                  alt=""
-                  className="mx-auto w-full h-[375px] hover:scale-105 transition-all duration-300"
-                />
-              </Link>
-              <div className="mt-4 px-4">
-                <h4 className="text-base font-semibold mb-2">
-                  {products.title}
-                </h4>
-                <div className="flex justify-between">
-                  <p className="text-black/50">{products.category}</p>
-                  <p className="font-semibold">{products.price}</p>
-                </div>
+          {/* {bestSellers.map((products) => ( */}
+          <SwiperSlide>
+            <Link to="/">
+              <img
+                src=""
+                alt=""
+                className="mx-auto w-full h-[375px] hover:scale-105 transition-all duration-300"
+              />
+            </Link>
+            <div className="mt-4 px-4">
+              <h4 className="text-base font-semibold mb-2">title</h4>
+              <div className="flex justify-between">
+                <p className="text-black/50">category</p>
+                <p className="font-semibold">price</p>
               </div>
-            </SwiperSlide>
-          ))}
+            </div>
+          </SwiperSlide>
+          {/* ))} */}
         </Swiper>
       </div>
     </div>

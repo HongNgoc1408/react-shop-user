@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="mt-20 mb-10 flex flex-col md:flex-row items-start justify-between gap-8">
           {/* company info */}
           <div className="md:w-[400px]">
-            <Link to="/">
+            <Link to={"/"}>
               <img src="/images/zara-logo-2019.png" alt="" className="w-1/4" />
             </Link>
             <p className="my-8 text-Black/75">

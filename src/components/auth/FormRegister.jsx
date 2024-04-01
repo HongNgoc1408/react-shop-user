@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-const register = () => {
+const FormRegister = () => {
   return (
     <section className="bg-primaryBG py-12 xl:px-28 px-4">
       <div className="max-w-[555px] h-auto bg-white m-auto mt-32 px-14 py-10 rounded-md">
@@ -44,4 +43,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default FormRegister;
