@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { useMutationHooks } from "../../hooks/useMutationHooks";
-import * as UserService from "../../services/UserService";
 import { createUser } from "../../services/UserService";
 
 const FormRegister = () => {
@@ -17,47 +15,22 @@ const FormRegister = () => {
   const [password, setPassword] = useState("");
   const [comfirmPassword, setComfirmPassword] = useState("");
 
-  const handleOnchangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const mutation = useMutationHooks((data) => UserService.createUser(data));
-
-  const { data, isPending, isSuccess, isError } = mutation;
-
-  const handleNavigateLogin = () => {
-    navigate("/login");
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
-      console.log("Registration successful!");
-      navigate("/login");
-    }
-  }, [isSuccess, navigate]);
-
-  const handleOnchangeName = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleOnchangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleOnchangeCP = (e) => {
-    setComfirmPassword(e.target.value);
-  };
-
-  const data1 = {
+  const data = {
     name,
     email,
     password,
     comfirmPassword,
   };
-  const handleRegister = async () => {
-    // mutation.mutate({
-    await createUser(data1);
-    // });
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const res = await createUser(data);
+    console.log(res.message);
+    if (res.status === "OK") {
+      navigate("/login");
+    } else {
+      alert("Error:" + res.message);
+    }
   };
 
   return (
@@ -68,7 +41,7 @@ const FormRegister = () => {
           <div>
             <input
               value={name}
-              onChange={handleOnchangeName}
+              onChange={(e) => setName(e.target.value)}
               type="text"
               placeholder="Name"
               autoComplete="name"
@@ -80,7 +53,7 @@ const FormRegister = () => {
           <div>
             <input
               value={email}
-              onChange={handleOnchangeEmail}
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Email Address"
               className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
@@ -97,7 +70,7 @@ const FormRegister = () => {
 
             <input
               value={password}
-              onChange={handleOnchangePassword}
+              onChange={(e) => setPassword(e.target.value)}
               type={isShowPassword ? "text" : "password"}
               placeholder="Password"
               autoComplete="password"
@@ -115,7 +88,7 @@ const FormRegister = () => {
 
             <input
               value={comfirmPassword}
-              onChange={handleOnchangeCP}
+              onChange={(e) => setComfirmPassword(e.target.value)}
               type={isShowComfirmPassword ? "text" : "password"}
               placeholder="Comfirm Password"
               autoComplete="password"
@@ -135,13 +108,6 @@ const FormRegister = () => {
           <input type="checkbox" className="w-4 h-4 mr-2" />
           <p className="text-sm">I accept the privacy statement</p>
         </div>
-
-        {/* Error or success messages */}
-        {data?.status === "ERR" && (
-          <span style={{ color: "red" }}>{data?.message}</span>
-        )}
-        {isError && <span className="text-red-500">{data?.message}</span>}
-        {isSuccess && <span className="text-green-500">{data?.message}</span>}
 
         <div className="w-full flex flex-col my-4">
           <button
@@ -165,12 +131,12 @@ const FormRegister = () => {
         <div className="w-full flex items-center justify-center">
           <p className="text-sm cursor-pointer">
             Do you already have an account?
-            <span
-              onClick={handleNavigateLogin}
+            <a
+              href="/login"
               className="text-sm font-medium cursor-pointer hover:underline hover:underline-offset-2"
             >
               Login
-            </span>
+            </a>
           </p>
         </div>
       </form>

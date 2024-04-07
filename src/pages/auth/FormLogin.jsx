@@ -1,103 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-// import { useMutationHooks } from "../../hooks/useMutationHooks";
-import * as UserService from "../../services/UserService";
+import { loginUser, getUser } from "../../services/UserService";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
-import { updateUser } from "../../redux/slides/userSlide";
+import { updateUser } from "../../redux/slides/useSlides";
 
 const FormLogin = () => {
+  const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  // const mutation = useMutationHooks((data) => UserService.loginUser(data));
+  const data = {
+    email,
+    password,
+  };
 
-  // const { data, isSuccess } = mutation;
-
-  // console.log(mutation);
-
-  const handleLogin = async () => {
-    try {
-      const data = await UserService.loginUser({ email, password });
-      if (data?.status === "ERROR") {
-        setError(data?.message);
-      } else {
-        navigate("/");
-        localStorage.setItem(
-          "access_token",
-          JSON.stringify(data?.access_token)
-        );
-        localStorage.setItem(
-          "refresh_token",
-          JSON.stringify(data?.refresh_token)
-        );
-        if (data?.access_token) {
-          const decoded = jwtDecode(data?.access_token);
-          if (decoded?.id) {
-            await handleGetDetailsUser(decoded?.id, data?.access_token);
-          }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const res = await loginUser(data);
+    if (res.status === "OK") {
+      navigate("/");
+      localStorage.setItem("access_token", JSON.stringify(res.access_token));
+      if (res?.access_token) {
+        const decoded = jwtDecode(res?.access_token);
+        if (decoded?.id) {
+          const data = await getUser(decoded?.id, res?.access_token);
+          dispatch(
+            updateUser({ ...data?.data, access_token: res?.access_token })
+          );
         }
       }
-    } catch (error) {
-      console.error("Error logging in:", error);
-
-      setError("An error occurred. Please try again.");
+    } else {
+      alert("Error: " + res.message);
     }
-  };
-
-  const handleGetDetailsUser = async (id, token) => {
-    const storage = localStorage.getItem("refresh_token");
-    const refreshToken = JSON.parse(storage);
-    const res = await UserService.getDetailsUser(id, token);
-    dispatch(updateUser({ ...res?.data, access_token: token, refreshToken }));
-  };
-
-  const handleNavigateRegister = () => {
-    navigate("/register");
-  };
-
-  // const handleLogin = () => {
-  //   mutation.mutate({
-  //     email,
-  //     password,
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   if (isSuccess && data) {
-  //     if (data?.status === "ERROR") {
-  //       console.error(data?.message);
-  //     } else {
-  //       navigate("/");
-  //       localStorage.setItem(
-  //         "access_token",
-  //         JSON.stringify(data?.access_token)
-  //       );
-  //       localStorage.setItem(
-  //         "refresh_token",
-  //         JSON.stringify(data?.refresh_token)
-  //       );
-  //       if (data?.access_token) {
-  //         const decoded = jwtDecode(data?.access_token);
-  //         if (decoded?.id) {
-  //           handleGetDetailsUser(decoded?.id, data?.access_token);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }, [isSuccess, data]);
-
-  const handleOnchangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleOnchangePassword = (e) => {
-    setPassword(e.target.value);
   };
 
   return (
@@ -108,7 +46,7 @@ const FormLogin = () => {
           <div>
             <input
               value={email}
-              onChange={handleOnchangeEmail}
+              onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Email address"
               autoComplete="email"
@@ -125,7 +63,7 @@ const FormLogin = () => {
             </span>
             <input
               value={password}
-              onChange={handleOnchangePassword}
+              onChange={(e) => setPassword(e.target.value)}
               type={isShowPassword ? "text" : "password"}
               placeholder="Password"
               autoComplete="password"
@@ -154,11 +92,6 @@ const FormLogin = () => {
           </button>
         </div>
 
-        {/* Hiển thị thông báo lỗi */}
-        {error && (
-          <span style={{ color: "red" }}>{error}</span>
-        )}
-
         <div className="w-full flex items-center justify-center relative py-2">
           <div className="w-full h-[1px] bg-black"></div>
         </div>
@@ -166,12 +99,12 @@ const FormLogin = () => {
         <div className="w-full flex items-center justify-center">
           <p className="text-sm cursor-pointer">
             Need an account ?
-            <span
-              onClick={handleNavigateRegister}
+            <a
+              href="/register"
               className="text-sm font-medium cursor-pointer hover:underline hover:underline-offset-2"
             >
               Register
-            </span>
+            </a>
           </p>
         </div>
       </form>

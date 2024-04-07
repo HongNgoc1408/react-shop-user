@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaArrowAltCircleRight, FaStar } from "react-icons/fa";
 // import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import * as ProductService from "../../services/ProductService";
 
 const SingleProduct = () => {
   // const { id } = useParams();
@@ -22,6 +25,16 @@ const SingleProduct = () => {
   //   window.scrollTo({ top: 0, behavior: "smooth" });
   // }, [id]);
   // const { title, category, price, image, status } = products;
+  
+  const fetchGetDetailsProduct = async (context) => {
+    const id = context?.queryKey && context?.queryKey[1];
+    if (id) {
+      const res = await ProductService.getDetailsProduct(id);
+      
+      return res.data;
+    }
+  };
+
   return (
     <div className="mt-28 max-w-screen-2xl container mx-auto xl-px-28 px-4">
       <div className="p-3 max-w-7xl m-auto">
@@ -29,7 +42,7 @@ const SingleProduct = () => {
           <a href="/" className="text-gray-600">
             Home
           </a>
-          <a href="/shop" className="font-bold text-black">
+          <a href="/" className="font-bold text-black">
             / Shop
           </a>
         </div>

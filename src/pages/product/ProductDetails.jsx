@@ -1,10 +1,13 @@
 import React from "react";
 import SingleProduct from "../../components/product/SingleProduct";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProductDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   return (
     <div>
-      <SingleProduct />
+      <SingleProduct idProduct={id} />
     </div>
   );
 };
