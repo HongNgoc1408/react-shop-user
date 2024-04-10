@@ -7,6 +7,7 @@ import BestSellers from "../../components/home/BestSellers";
 import NewLetters from "../../components/home/NewLetters";
 
 const HomePage = () => {
+ 
   return (
     <div>
       <Banner />

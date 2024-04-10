@@ -1,12 +1,27 @@
 import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaEye,
+  FaEyeSlash,
+  FaStopCircle,
+  FaXRay,
+  FaXbox,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { loginUser, getUser } from "../../services/UserService";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../redux/slides/useSlides";
+import * as UserService from "../../services/UserService";
+import {
+  FaCircleExclamation,
+  FaNotdef,
+  FaSackXmark,
+  FaX,
+} from "react-icons/fa6";
 
 const FormLogin = () => {
+  const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -23,23 +38,45 @@ const FormLogin = () => {
     const res = await loginUser(data);
     if (res.status === "OK") {
       navigate("/");
-      localStorage.setItem("access_token", JSON.stringify(res.access_token));
+      localStorage.setItem("access_token", JSON.stringify(res?.access_token));
       if (res?.access_token) {
         const decoded = jwtDecode(res?.access_token);
+        // console.log("decoded", decoded);
         if (decoded?.id) {
-          const data = await getUser(decoded?.id, res?.access_token);
-          dispatch(
-            updateUser({ ...data?.data, access_token: res?.access_token })
-          );
+          handleGetUser(decoded?.id, res?.access_token);
         }
       }
     } else {
-      alert("Error: " + res.message);
+      console.error(res.message);
+      setNotification("Login failed!");
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     }
+  };
+
+  const handleGetUser = async (id, token) => {
+    const res = await UserService.getUser(id, token);
+    dispatch(updateUser({ ...res?.data, access_token: token }));
+    // console.log("res", res);
   };
 
   return (
     <section className="bg-primaryBG py-12 xl:px-28 px-4">
+      {/* Thông báo */}
+      {notification && (
+        <div className="absolute top-28 right-0 mt-4 mr-4 bg-red-400 text-white px-4 py-2 rounded">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <FaX className="size-10" />
+            </div>
+            <div className="ml-3 pt-0.5">
+              <p className="mt-1 text-md text-white">{notification}</p>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <form className="max-w-[555px] h-auto bg-white m-auto mt-32 px-14 py-10 rounded-md">
         <h3 className="title">ACCESS YOUR ACCOUNT</h3>
         <div className="w-full flex flex-col">
@@ -57,7 +94,7 @@ const FormLogin = () => {
           <div className="relative">
             <span
               className="z-10 absolute top-4 right-8"
-              onClick={() => setIsShowPassword(!isShowPassword)}
+              onClick={(e) => setIsShowPassword(!isShowPassword)}
             >
               {isShowPassword ? <FaEye /> : <FaEyeSlash />}
             </span>

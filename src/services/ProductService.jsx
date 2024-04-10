@@ -2,6 +2,7 @@ import axios from "axios";
 
 // Thiết lập base URL
 axios.defaults.baseURL = "http://localhost:3000/api";
+
 import { axiosJWT } from "./UserService";
 
 export const getAllProduct = async (search, limit) => {

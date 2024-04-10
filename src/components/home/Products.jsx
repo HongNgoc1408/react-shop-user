@@ -1,69 +1,65 @@
 import React, { useEffect, useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import Cards from "../product/Cards";
+import { useQuery } from "@tanstack/react-query";
+import * as ProductService from "../../services/ProductService";
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [sortOption, setSortOption] = useState("default");
+  const [setSelectedCategory] = useState("all");
+  const [setSortOption] = useState("default");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/products.json");
-        const data = await response.json();
-        // console.log(data);
-        setProducts(data);
-        setFilteredItems(data);
-      } catch (error) {
-        console.log("Error fetching data: ", error);
-      }
-    };
-    fetchData();
-  }, []);
+  const fetchProductAll = async () => {
+    const res = await ProductService.getAllProduct();
+    setFilteredItems(res.data);
+    return res;
+  };
 
-  console.log(products);
+  const { data: products } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetchProductAll,
+    retry: 3,
+    retryDelay: 100,
+  });
 
-  // filtering function
-  const filterItems = (category) => {
+  // Filter function
+  const filterItems = (type) => {
     const filtered =
-      category === "all"
-        ? products
-        : products.filter((item) => item.category === category);
-
+      type === "all"
+        ? products.data // Lấy tất cả sản phẩm từ data
+        : products.data.filter((item) => item.type === type);
     setFilteredItems(filtered);
-    setSelectedCategory(category);
+    setSelectedCategory(type);
   };
 
-  // show all products
+  // Show all products
   const showAll = () => {
-    setFilteredItems(products);
-    selectedCategory("all");
+    setFilteredItems(products.data);
+    setSelectedCategory("all");
   };
-
-  //sort function
+  // Sort function
   const handleSortChange = (option) => {
     setSortOption(option);
-    // logic for sort
-    let sortedItems = [...filteredItems];
-    switch (option) {
-      case "A-Z":
-        sortedItems.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case "Z-A":
-        sortedItems.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      case "low-to-high":
-        sortedItems.sort((a, b) => a.price - b.price);
-        break;
-      case "high-to-low":
-        sortedItems.sort((a, b) => b.price - a.price);
-        break;
-      default:
-        break;
+    if (filteredItems && filteredItems.length > 0) {
+      let sortedItems = [...filteredItems];
+      switch (option) {
+        case "A-Z":
+          sortedItems.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case "Z-A":
+          sortedItems.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case "low-to-high":
+          sortedItems.sort((a, b) => a.price - b.price);
+          break;
+        case "high-to-low":
+          sortedItems.sort((a, b) => b.price - a.price);
+          break;
+        default:
+          break;
+      }
+      setFilteredItems(sortedItems);
     }
-    setFilteredItems(sortedItems);
   };
 
   return (
@@ -75,10 +71,10 @@ const Products = () => {
         <div className="flex flex-col md:flex-row flex-wrap md:justify-between items-center space-y-3 mb-8">
           {/* All */}
           <div className="flex flex-row justify-start md:items-center md:gap-8 gap-4 flex-wrap">
-            <button>All Products</button>
-            <button>Clothing</button>
-            <button>Suit</button>
-            <button>Hoodies </button>
+            <button onClick={() => showAll()}>All Products</button>
+            <button onClick={() => filterItems("Dress")}>Dress</button>
+            <button onClick={() => filterItems("Suit")}>Suit</button>
+            <button onClick={() => filterItems("T-shirt")}>T-shirt </button>
           </div>
 
           {/* Sort option */}
@@ -90,6 +86,7 @@ const Products = () => {
             <select
               id="sort"
               className="bg-black text-white px-2 py-1 rounded-sm"
+              onChange={(e) => handleSortChange(e.target.value)}
             >
               <option value="default">Default</option>
               <option value="A-Z">A-Z</option>
@@ -99,7 +96,25 @@ const Products = () => {
             </select>
           </div>
         </div>
-        <Cards />
+
+        {/* products card */}
+        <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 items-center justify-center gap-12 shadow-sm">
+          {/* {products?.data?.map((product) => { */}
+          {filteredItems?.map((product) => {
+            return (
+              <Cards
+                key={product._id}
+                id={product._id}
+                countInStock={product.countInStock}
+                description={product.description}
+                image={product.image}
+                name={product.name}
+                price={product.price}
+                type={product.type}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

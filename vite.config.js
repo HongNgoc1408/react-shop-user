@@ -11,6 +11,6 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3001, // Sử dụng biến môi trường cho cổng backend
+    port: 3001,
   },
 });

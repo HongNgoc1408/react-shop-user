@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -10,17 +10,29 @@ import "swiper/css/navigation";
 // import required modules
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import * as ProductService from "../../services/ProductService";
+import Cards from "../product/Cards";
 
 const BestSellers = () => {
-  // const [products, setProducts] = useState([]);
-  // useEffect(() => {
-  //   fetch("products.json")
-  //     .then((res) => res.json())
-  //     .then((data) => setProducts(data));
-  // }, []);
+  const [filteredBestSellers, setFilteredBestSellers] = useState([]);
+  const [products, setProducts] = useState([]);
 
-  // const bestSellers = products.filter((item) => item.status === "Best Selers");
-  // console.log(bestSellers);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await ProductService.getAllProduct();
+        setProducts(res.data);
+        setFilteredBestSellers(
+          res.data.filter((item) => item.status === "Best Sellers")
+        );
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-28px px-4">
@@ -33,6 +45,7 @@ const BestSellers = () => {
         </p>
       </div>
       {/* best seller product */}
+
       <div className="mb-16">
         <Swiper
           slidesPerView={1}
@@ -63,24 +76,24 @@ const BestSellers = () => {
           modules={[Autoplay, Pagination, Navigation]}
           className="mySwiper"
         >
-          {/* {bestSellers.map((products) => ( */}
-          <SwiperSlide>
-            <Link to="/">
-              <img
-                src=""
-                alt=""
-                className="mx-auto w-full h-[375px] hover:scale-105 transition-all duration-300"
-              />
-            </Link>
-            <div className="mt-4 px-4">
-              <h4 className="text-base font-semibold mb-2">title</h4>
-              <div className="flex justify-between">
-                <p className="text-black/50">category</p>
-                <p className="font-semibold">price</p>
-              </div>
-            </div>
-          </SwiperSlide>
-          {/* ))} */}
+          {filteredBestSellers?.map((product) => {
+            return (
+              <SwiperSlide key={product._id}>
+                <Cards
+                  key={product._id}
+                  id={product._id}
+                  countInStock={product.countInStock}
+                  description={product.description}
+                  image={product.image}
+                  name={product.name}
+                  price={product.price}
+                  type={product.type}
+                />
+              </SwiperSlide>
+            );
+          })}
+          {/* ),
+           ),} */}
         </Swiper>
       </div>
     </div>

@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { createUser } from "../../services/UserService";
+import { FaX } from "react-icons/fa6";
 
 const FormRegister = () => {
+  const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
-
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isShowComfirmPassword, setIsShowComfirmPassword] = useState(false);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,12 +29,30 @@ const FormRegister = () => {
     if (res.status === "OK") {
       navigate("/login");
     } else {
-      alert("Error:" + res.message);
+      console.error(res.message);
+      setNotification("Register failed!");
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     }
   };
 
   return (
     <section className="bg-primaryBG py-12 xl:px-28 px-4">
+      {/* Thông báo */}
+      {notification && (
+        <div className="absolute top-28 right-0 mt-4 mr-4 bg-red-400 text-white px-4 py-2 rounded">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <FaX className="size-10" />
+            </div>
+            <div className="ml-3 pt-0.5">
+              <p className="mt-1 text-md text-white">{notification}</p>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <form className="max-w-[555px] h-auto bg-white m-auto mt-32 px-14 py-10 rounded-md">
         <h3 className="title">PERSONAL INFORMATION</h3>
         <div className="w-full flex flex-col">

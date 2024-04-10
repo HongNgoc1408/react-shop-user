@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  id: "",
   name: "",
   email: "",
-  // phone: "",
-  // address: "",
-  // avatar: "",
+  isAdmin: "",
+  phone: "",
+  address: "",
+  avatar: "",
+  city: "",
   access_token: "",
-  // id: "",
-  // isAdmin: false,
-  // city: "",
-  // refreshToken: "",
+  refresh_token: "",
 };
 
 export const userSlide = createSlice({
@@ -19,33 +19,42 @@ export const userSlide = createSlice({
   reducers: {
     updateUser: (state, action) => {
       const {
+        _id = "",
         name = "",
         email = "",
+        isAdmin = "",
+        phone = "",
+        address = "",
+        avatar = "",
+        city = "",
         access_token = "",
-        // address = "",
-        // phone = "",
-        // avatar = "",
-        // _id = "",
-        // isAdmin,
-        // city = "",
-        // refreshToken = "",
+        refresh_token = "",
       } = action.payload;
-      console.log("action", action);
-      state.name = name ? name : state.name;
-      state.email = email ? email : state.email;
-      // state.address = address ? address : state.address;
-      // state.phone = phone ? phone : state.phone;
-      // state.avatar = avatar ? avatar : state.avatar;
-      // state.id = _id ? _id : state.id
-      state.access_token = access_token ? access_token : state.access_token;
-      // state.isAdmin = isAdmin ? isAdmin : state.isAdmin;
-      // state.city = city ? city : state.city;
-      // state.refreshToken = refreshToken ? refreshToken : state.refreshToken;
+      state.name = name;
+      state.email = email;
+      state.isAdmin = isAdmin;
+      state.phone = phone;
+      state.address = address;
+      state.avatar = avatar;
+      state.id = _id;
+      state.city = city;
+      state.access_token = access_token;
+      state.refresh_token = refresh_token;
+    },
+    resetUser: (state) => {
+      state.name = "";
+      state.email = "";
+      state.isAdmin = "";
+      state.phone = "";
+      state.address = "";
+      state.avatar = "";
+      state.city = "";
+      state.access_token = "";
+      state.refresh_token = "";
     },
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { updateUser } = userSlide.actions;
 
 export default userSlide.reducer;
