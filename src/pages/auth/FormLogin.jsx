@@ -1,24 +1,12 @@
 import React, { useState } from "react";
-import {
-  FaCheckCircle,
-  FaEye,
-  FaEyeSlash,
-  FaStopCircle,
-  FaXRay,
-  FaXbox,
-} from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { loginUser, getUser } from "../../services/UserService";
+import { loginUser } from "../../services/UserService";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../redux/slides/useSlides";
 import * as UserService from "../../services/UserService";
-import {
-  FaCircleExclamation,
-  FaNotdef,
-  FaSackXmark,
-  FaX,
-} from "react-icons/fa6";
+import { FaX } from "react-icons/fa6";
 
 const FormLogin = () => {
   const [notification, setNotification] = useState(null);
@@ -76,7 +64,7 @@ const FormLogin = () => {
           </div>
         </div>
       )}
-      
+
       <form className="max-w-[555px] h-auto bg-white m-auto mt-32 px-14 py-10 rounded-md">
         <h3 className="title">ACCESS YOUR ACCOUNT</h3>
         <div className="w-full flex flex-col">

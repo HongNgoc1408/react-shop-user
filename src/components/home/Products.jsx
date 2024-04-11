@@ -6,8 +6,8 @@ import * as ProductService from "../../services/ProductService";
 
 const Products = () => {
   const [filteredItems, setFilteredItems] = useState([]);
-  const [setSelectedCategory] = useState("all");
-  const [setSortOption] = useState("default");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [sortOption, setSortOption] = useState("default");
 
   const fetchProductAll = async () => {
     const res = await ProductService.getAllProduct();
@@ -26,7 +26,7 @@ const Products = () => {
   const filterItems = (type) => {
     const filtered =
       type === "all"
-        ? products.data // Lấy tất cả sản phẩm từ data
+        ? products.data
         : products.data.filter((item) => item.type === type);
     setFilteredItems(filtered);
     setSelectedCategory(type);
@@ -37,6 +37,7 @@ const Products = () => {
     setFilteredItems(products.data);
     setSelectedCategory("all");
   };
+
   // Sort function
   const handleSortChange = (option) => {
     setSortOption(option);
@@ -99,7 +100,6 @@ const Products = () => {
 
         {/* products card */}
         <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 items-center justify-center gap-12 shadow-sm">
-          {/* {products?.data?.map((product) => { */}
           {filteredItems?.map((product) => {
             return (
               <Cards

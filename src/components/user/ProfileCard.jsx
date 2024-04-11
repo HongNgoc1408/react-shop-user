@@ -2,22 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaCheckCircle, FaEdit, FaTimesCircle } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import * as UserService from "../../services/UserService";
-import ImageUploading from "react-images-uploading";
 
 const ProfileCard = () => {
-  const [notification, setNotification] = useState(null);
+  const [successNotification, setSuccessNotification] = useState(null);
+  const [errorNotification, setErrorNotification] = useState(null);
   const user = useSelector((state) => state.user);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [avatar, setAvatar] = useState("");
-  const [images, setImages] = useState([]);
-  const maxNumber = 1;
 
-  const onChange = (imageList, addUpdateIndex) => {
-    setImages(imageList);
-  };
   useEffect(() => {
     setName(user?.name),
       setEmail(user?.email),
@@ -40,44 +35,56 @@ const ProfileCard = () => {
         user?.access_token
       );
       //   console.log(res);
-      setNotification("Update successful!");
+      setSuccessNotification("Update successful!");
       setTimeout(() => {
-        setNotification(null);
+        setSuccessNotification(null);
         window.location.reload();
       }, 3000);
     } catch (error) {
       console.error(error);
-      setNotification("Update failed!");
+      setErrorNotification("Update failed!");
       setTimeout(() => {
-        setNotification(null);
+        setErrorNotification(null);
       }, 3000);
     }
   };
 
-  const handleImageChange = (imageList, addUpdateIndex) => {
-    const image = imageList[addUpdateIndex];
-    if (image) {
-      setAvatar(image.data_url);
-    }
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const imageURL = e.target.result;
+      setAvatar(imageURL);
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
     <div className="border-b-2 block md:flex">
-      {/* Thông báo */}
-      {notification && (
-        <div
-          className={`absolute top-28 right-0 mt-4 mr-4 px-4 py-2 rounded ${notification === "Update successful!" ? "bg-green-400 text-white" : "bg-red-400 text-white"}`}
-        >
+      {/* Thông báo thành công */}
+      {successNotification && (
+        <div className="absolute top-28 right-0 mt-4 mr-4 bg-green-400 text-white px-4 py-2 rounded">
           <div className="flex items-start">
             <div className="flex-shrink-0">
-              {notification === "Update successful!" ? (
-                <FaCheckCircle className="size-10" />
-              ) : (
-                <FaTimesCircle className="size-10" />
-              )}
+              <FaCheckCircle className="size-10" />
             </div>
             <div className="ml-3 pt-0.5">
-              <p className="mt-1 text-sm">{notification}</p>
+              <p className="mt-1 text-md text-white">{successNotification}</p>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Thông báo thất bại */}
+      {errorNotification && (
+        <div className="absolute top-28 right-0 mt-4 mr-4 bg-red-400 text-white px-4 py-2 rounded">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <FaTimesCircle className="size-10" />
+            </div>
+            <div className="ml-3 pt-0.5">
+              <p className="mt-1 text-md text-white">{errorNotification}</p>
             </div>
           </div>
         </div>
@@ -99,89 +106,26 @@ const ProfileCard = () => {
           This information is secret so be careful
         </span>
         <div className="w-full p-8 mx-2 flex justify-center">
-          <img
-            id="avatar"
-            className="max-w-xs w-full items-center border"
-            src={avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-            alt=""
+          {avatar && (
+            <img
+              src={avatar}
+              alt="Image Product"
+              className="max-w-xs w-full items-center border"
+            />
+          )}
+        </div>
+        <div className="w-full mx-14 flex justify-center">
+          <input
+            onChange={handleImageChange}
+            className="w-full px-5 py-0.5 text-gray-700 bg-transparent rounded"
+            id="image"
+            name="image"
+            type="file"
+            required=""
+            placeholder="Image Product"
+            aria-label="Image Product"
           />
         </div>
-
-        <ImageUploading
-          multiple
-          value={images}
-          onChange={handleImageChange}
-          maxNumber={maxNumber}
-          dataURLKey="data_url"
-        >
-          {({
-            imageList,
-            onImageUpload,
-            onImageRemoveAll,
-            onImageUpdate,
-            onImageRemove,
-            isDragging,
-            dragProps,
-            errors, // Kéo errors vào để sử dụng
-          }) => (
-            <div className="upload__image-wrapper">
-              <button
-                className="bg-dark-button -mt-2 text-md font-bold px-3 py-2 ml-10"
-                style={isDragging ? { color: "red" } : undefined}
-                onClick={onImageUpload}
-                {...dragProps}
-              >
-                Click or Drop here
-              </button>
-
-              <button
-                className="bg-dark-button -mt-2 text-md font-bold px-3 py-2 ml-10"
-                onClick={onImageRemoveAll}
-              >
-                Remove all images
-              </button>
-              {imageList.map((image, index) => (
-                <div key={index} className="image-item">
-                  <img src={image["data_url"]} alt="" width="100" />
-                  <div className="image-item__btn-wrapper">
-                    <button
-                      className="bg-dark-button -mt-2 text-md font-bold px-5 py-2"
-                      onClick={() => onImageUpdate(index)}
-                    >
-                      Update
-                    </button>
-                    <button
-                      className="bg-dark-button -mt-2 text-md font-bold px-5 py-2"
-                      onClick={() => onImageRemove(index)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              ))}
-              {/* Hiển thị các thông báo lỗi */}
-              {errors && (
-                <div>
-                  {errors.maxNumber && (
-                    <span>Number of selected images exceed maxNumber</span>
-                  )}
-                  {errors.acceptType && (
-                    <span>Your selected file type is not allow</span>
-                  )}
-                  {errors.maxFileSize && (
-                    <span>Selected file size exceed maxFileSize</span>
-                  )}
-                  {errors.resolution && (
-                    <span>
-                      Selected file is not match your desired resolution
-                    </span>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-        </ImageUploading>
       </div>
       <div className="w-full md:w-3/5 p-8 bg-white lg:ml-4 shadow-md">
         <div className="rounded  shadow p-6">

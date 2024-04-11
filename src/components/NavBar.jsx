@@ -13,7 +13,8 @@ const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useSelector((state) => state.user);
   const [userName, setUserName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [avatar, setAvatar] = useState("");
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -43,7 +44,8 @@ const NavBar = () => {
 
   useEffect(() => {
     setUserName(user?.name);
-  }, [user?.name]);
+    setAvatar(user?.avatar);
+  }, [user?.name, user?.avatar]);
 
   return (
     <header className="max-w-screen-2xl xl:px-28 px-4 absolute top-0 right-0 left-0">
@@ -92,17 +94,20 @@ const NavBar = () => {
             <div className="relative w-full items-center mx-auto max-w-screen-sm">
               <div className="relative group/bouton w-full py-2">
                 <div className="flex items-center gap-2 hover:text-orange-500 cursor-pointer text-nowrap">
-                  <FaUser />
+                  {/* <FaUser /> */}
+                  <button className="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
+                    <img src={avatar} alt="Avatar" />
+                  </button>
                   <span className="hover:border-b-2 hover:border-b-orange-500">
                     {userName || user?.email || "User"}
                   </span>
                 </div>
-                <div className="absolute bg-orange-500 top-full origine-top opacity-0 hidden flex-col group-hover/bouton:flex group-hover/bouton:opacity-100 transition-all">
+                <div className="absolute bg-orange-500 top-full origine-top opacity-0 hidden flex-col group-hover/bouton:flex group-hover/bouton:opacity-100 transition-all ml-14">
                   <div className="relative flex justify-between items-center w-full border-b border-stone-200 py-2 px-2">
                     <div className="flex items-center gap-3">
                       <a
                         href="/profile"
-                        className="block text-white text-base hover:border-b-2 hover:border-b-white"
+                        className="block text-white hover:border-b-2 hover:border-b-white"
                       >
                         Profile
                       </a>
@@ -113,7 +118,7 @@ const NavBar = () => {
                       <a
                         onClick={handleLogout}
                         href=""
-                        className="block text-white text-base hover:border-b-2 hover:border-b-white"
+                        className="block text-white hover:border-b-2 hover:border-b-white"
                       >
                         Logout
                       </a>
