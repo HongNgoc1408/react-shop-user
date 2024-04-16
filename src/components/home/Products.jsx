@@ -76,6 +76,7 @@ const Products = () => {
             <button onClick={() => filterItems("Dress")}>Dress</button>
             <button onClick={() => filterItems("Suit")}>Suit</button>
             <button onClick={() => filterItems("T-shirt")}>T-shirt </button>
+            <button onClick={() => filterItems("Hoodies")}>Hoodies</button>
           </div>
 
           {/* Sort option */}

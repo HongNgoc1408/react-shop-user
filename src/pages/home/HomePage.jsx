@@ -8,14 +8,19 @@ import NewLetters from "../../components/home/NewLetters";
 
 const HomePage = () => {
   return (
-    <div>
-      <Banner />
+    <>
+      <Banner
+        title="WOMEN"
+        description=" You can explore ans shop many differnt collection from various
+        barands here."
+        link="/women"
+      />
       <Category />
       <Products />
       <Collection />
       <BestSellers />
       <NewLetters />
-    </div>
+    </>
   );
 };
 

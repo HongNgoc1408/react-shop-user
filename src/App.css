@@ -1,17 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"); */
 
 /* body {
   font-family: "Roboto", sans-serif;
 } */
 
 .title {
-  @apply text-3xl font-semibold capitalize text-center my-8 cursor-pointer;
+  @apply text-3xl font-serif capitalize text-center my-8 cursor-pointer;
 }
 
 .bg-dark-button {
-  @apply bg-Black hover:bg-orange-500 px-6 py-2 text-white font-semibold rounded-md;
+  @apply relative rounded-md px-6 py-2 flex items-center justify-center overflow-hidden bg-gray-800 text-white shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-500 before:duration-500 before:ease-out hover:shadow-orange-500 hover:before:h-56 hover:before:w-full;
+  /* @apply bg-Black hover:bg-orange-500 px-6 py-2 text-white font-semibold rounded-md; */
 }
 
 .bg-light-button {
-  @apply px-6 py-2 bg-white text-Black hover:bg-orange-500 rounded-md font-semibold;
+  @apply relative rounded-md px-6 py-2 flex items-center justify-center overflow-hidden bg-white text-Black shadow-2xl transition-all before:absolute before:h-0 before:w-0 before:rounded-full before:bg-orange-500 before:duration-500 before:ease-out hover:shadow-orange-500 hover:before:h-56 hover:before:w-full;
+  /* @apply px-6 py-2 bg-white text-Black hover:bg-orange-500 rounded-md font-semibold; */
 }

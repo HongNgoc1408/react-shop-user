@@ -6,3 +6,12 @@ export const isJsonString = (data) => {
   }
   return true;
 };
+
+export const convertPrice = (price) => {
+  try {
+      // const result  = price?.toLocaleString().replaceAll(',', '.')
+      return `$ ${price}`
+  } catch (error) {
+      return null
+  }
+}

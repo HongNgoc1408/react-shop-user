@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { FaArrowAltCircleRight, FaStar } from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { FaSortDown, FaSortUp, FaStar } from "react-icons/fa";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import * as ProductService from "../../services/ProductService";
+import { addOrderProduct } from "../../redux/slides/orderSlide";
 
 const SingleProduct = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
+  const user = useSelector((state) => state.user);
+  const order = useSelector((state) => state.order);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [product, setProduct] = useState({});
+  const [numProduct, setNumProduct] = useState(1);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await ProductService.getAllProduct();
-        // console.log(data);
         const product = await ProductService.getDetailsProduct(id);
-        // console.log(product);
-        setProduct(product);
+        const data = product?.data;
+        setProduct(data);
       } catch (error) {
         console.log("Error fetching data: ", error);
       }
@@ -25,102 +29,145 @@ const SingleProduct = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
-  if (!product) {
-    return <div>Loading...</div>;
-  }
+  const handleChangeCount = (type) => {
+    if (type === "increase") {
+      setNumProduct(numProduct + 1);
+    } else {
+      if (numProduct > 1) {
+        setNumProduct(numProduct - 1);
+      }
+    }
+  };
 
   const { name, type, price, image, status, countInStock, description } =
-    product.data;
-  // console.log(product.data);
-  // console.log(name);
+    product;
+
+  const handleAddOrderProduct = () => {
+    if (!user?.id) {
+      navigate("/login", { state: location?.pathname });
+    } else {
+      // {
+      //   name: { type: String, required: true },
+      //   amount: { type: Number, required: true },
+      //   image: { type: String, required: true },
+      //   price: { type: Number, required: true },
+      //   product: {
+      //     type: mongoose.Schema.Types.ObjectId,
+      //     ref: "Product",
+      //     required: true,
+      //   },
+      // },
+      dispatch(
+        addOrderProduct({
+          orderItem: {
+            name: product?.name,
+            amount: numProduct,
+            image: product?.image,
+            price: product?.price,
+            product: product?._id,
+            countInStock: product?.countInStock,
+          },
+        })
+      );
+    }
+  };
+
   return (
     <div className="mt-28 max-w-screen-2xl container mx-auto xl-px-28 px-4">
       <div className="p-3 max-w-7xl m-auto">
         <div className="mt-16">
-          <a href="/" className="text-gray-600">
+          <Link to="/" className="text-gray-600">
             Home
-          </a>
-          <a href="/" className="font-bold text-black">
-            / Product
-          </a>
+          </Link>
+          <Link to="/women" className="font-bold text-black">
+            / Women
+          </Link>
         </div>
+        {product ? (
+          <div className="mt-2 sm:mt-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-2 gap-6 h-max">
+              <div className="w-8/12 mx-auto">
+                <img src={image} alt="" className="" />
+              </div>
 
-        <div className="mt-2 sm:mt-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-6 h-max">
-            <div>
-              <img src={image} alt={name} className="w-full" />
-            </div>
+              {/* product detail */}
+              <div className="w-10/12 mx-auto">
+                <h1 className="title text-left text-nowrap">{name}</h1>
 
-            {/* product detail */}
-            <div>
-              <h1 className="title text-left text-nowrap">{name}</h1>
+                <p className="mt-3 text-gray-600 text-base leading-6 text-justify sm:text-left sm:mt-4">
+                  {description}
+                </p>
+                <span className="my-2 text-xl text-yellow-500 flex items-center gap-1 sm:my-4">
+                  <FaStar />
+                  <FaStar />
+                  <FaStar />
+                  <FaStar />
+                  <FaStar />
+                </span>
+                <p className="text-xl text-red-500 font-semibold sm:text-2xl">
+                  {price}
+                </p>
 
-              <p className="mt-3 text-gray-600 text-base leading-6 text-justify sm:text-left sm:mt-4">
-                {description}
-              </p>
-              <span className="my-2 text-xl text-yellow-500 flex items-center gap-1 sm:my-4">
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
-              </span>
-              <p className="text-xl text-red-500 font-semibold sm:text-2xl">
-                {price}
-              </p>
+                <div className="mt-4">
+                  <div className="text-left flex flex-col gap-2 w-full">
+                    <label className="font-semibold">Quantity</label>
+                    <div className="flex flex-wrap">
+                      <div className="flex w-8/12">
+                        <input
+                          type="text"
+                          name="numProduct"
+                          defaultValue={1}
+                          max={product?.countInStock}
+                          min={1}
+                          value={numProduct}
+                          onChange={(e) =>
+                            setNumProduct(Number(e.target.value))
+                          }
+                          required
+                          id="numProduct"
+                          className="bg-white text-lg text-gray-900 text-center focus:outline-none border border-gray-800 focus:border-gray-600 rounded-l-md w-full"
+                        />
+                      </div>
+                      <div className="flex flex-col w-4/12">
+                        <button className="text-white rounded-tr-md px-1 bg-gray-800 focus:bg-orange-500 focus:outline-none border border-gray-800 focus:border-orange-500">
+                          <FaSortUp
+                            onClick={() =>
+                              handleChangeCount(
+                                "increase",
+                                numProduct === product?.countInStock
+                              )
+                            }
+                            className="text-center mx-auto size-5"
+                          />
+                        </button>
+                        <button className="text-white rounded-br-md px-1 bg-gray-800 focus:bg-orange-500 focus:outline-none border border-gray-800 focus:border-orange-500">
+                          <FaSortDown
+                            onClick={() =>
+                              handleChangeCount("decrease", numProduct === 1)
+                            }
+                            className="text-center mx-auto size-5"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
 
-              <div className="mt-4">
-                <div className="text-left flex flex-col gap-2 w-full">
-                  <label className="font-semibold">Quantity</label>
-                  <input
-                    type="number"
-                    name="price"
-                    defaultValue={1}
-                    min={1}
-                    required
-                    id="price"
-                    className="border border-gray-300 text-sm font-semibold mb-1 max-w-full w-full 
-                    outline-none rounded-md m-0 py-3 px-4 md:py-3 md:px-4 focus:border-red-500"
-                  />
-                </div>
-                <div className="w-full text-left my-4">
-                  <button
-                    className="flex justify-center items-center gap-2 w-full py-3 px-4 bg-red-500 text-white font-bold border-red-500 
-                  rounded-md ease-in-out duration-150 shadow-slate-600 hover:bg-white hover:text-red-500 lg:m-0 md:px-6"
-                  >
-                    <span>Confirmed Order</span>
-                    <FaArrowAltCircleRight />
-                  </button>
+                  <div className="w-full text-left my-4">
+                    <button
+                      onClick={() => handleAddOrderProduct()}
+                      className="bg-dark-button flex justify-center items-center gap-2 w-full py-3 px-4 font-bold rounded-md lg:m-0 md:px-6"
+                    >
+                      <span className="relative z-10">Add to cart</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div>Loading ...</div>
+        )}
         <div className="text-black/75 mt-12">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            excepturi in molestias deserunt inventore illum aut expedita, amet
-            voluptatem impedit, eius quos ratione culpa doloribus, sequi minus
-            consequuntur neque beatae!
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            excepturi in molestias deserunt inventore illum aut expedita, amet
-            voluptatem impedit, eius quos ratione culpa doloribus, sequi minus
-            consequuntur neque beatae!
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            excepturi in molestias deserunt inventore illum aut expedita, amet
-            voluptatem impedit, eius quos ratione culpa doloribus, sequi minus
-            consequuntur neque beatae!
-          </p>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            excepturi in molestias deserunt inventore illum aut expedita, amet
-            voluptatem impedit, eius quos ratione culpa doloribus, sequi minus
-            consequuntur neque beatae!
-          </p>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
             excepturi in molestias deserunt inventore illum aut expedita, amet

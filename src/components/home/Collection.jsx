@@ -2,7 +2,7 @@ import React from "react";
 
 const Collection = () => {
   const backgroundImageStyle = {
-    backgroundImage: `url("/images/collection-bg.png")`, // Use the correct path to your image
+    backgroundImage: `url("/images/collection-bg.png")`,
   };
 
   return (
@@ -21,7 +21,7 @@ const Collection = () => {
             accent of gleaming rigidity.
           </p>
           <button className="bg-light-button">
-            See Collection
+            <span className="relative z-10">See Collection</span>
           </button>
         </div>
       </div>

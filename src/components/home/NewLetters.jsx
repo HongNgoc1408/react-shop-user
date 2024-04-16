@@ -39,11 +39,13 @@ const NewLetters = () => {
             className="h-8 bg-transparent outline-none border-b-2 pl-2 border-black 
             md:w-2/3 w-full mb-5 placeholder:text-black/50 mr-4"
           />
-          <input
+          <button
             type="submit"
             value={"Submit"}
             className="bg-black text-white bg-dark-button"
-          />
+          >
+            <span className=" relative z-10">Submit</span>
+          </button>
         </form>
       </div>
     </div>

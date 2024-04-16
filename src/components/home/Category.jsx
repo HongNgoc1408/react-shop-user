@@ -11,9 +11,9 @@ const companyLogo = [
 
 function Category() {
   return (
-    <div className="max-w-screen-2xl mx-auto container xl:px-28 px-4 py-28">
+    <div className="max-w-screen-2xl mx-auto container xl:px-28 px-4">
       {/* brand logo */}
-      <div className="flex items-center justify-around flex-wrap gap-4 py-5">
+      <div className="flex items-center justify-around flex-wrap gap-4">
         {companyLogo.map(({ id, img }) => (
           <div key={id}>
             <img src={img} alt="" />

@@ -34,7 +34,6 @@ const ProfileCard = () => {
         },
         user?.access_token
       );
-      //   console.log(res);
       setSuccessNotification("Update successful!");
       setTimeout(() => {
         setSuccessNotification(null);
@@ -98,7 +97,7 @@ const ProfileCard = () => {
             onClick={handleUpdate}
             className="bg-dark-button -mt-2 text-md font-bold rounded-full px-5 py-2"
           >
-            Edit
+            <span className="relative z-10">Edit</span>
           </a>
         </div>
 
@@ -114,6 +113,7 @@ const ProfileCard = () => {
             />
           )}
         </div>
+
         <div className="w-full mx-14 flex justify-center">
           <input
             onChange={handleImageChange}

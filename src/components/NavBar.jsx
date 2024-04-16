@@ -4,7 +4,7 @@ import logo from "/images/zara-logo-2019.png";
 import { FaUser } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as UserService from "../services/UserService";
 import { useNavigate } from "react-router-dom";
 
@@ -12,16 +12,19 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useSelector((state) => state.user);
+  const order = useSelector((state) => state.order);
   const [userName, setUserName] = useState("");
   const [avatar, setAvatar] = useState("");
+  // const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const navItems = [
-    { title: "BESTSELLERS", path: "#" },
-    { title: "WOMEN", path: "#" },
+    { title: "BESTSELLERS", path: "/bestSellers" },
+    { title: "WOMEN", path: "/women" },
     { title: "MEN", path: "#" },
     { title: "CHILDREN", path: "#" },
     { title: "PERFUME", path: "#" },
@@ -47,6 +50,11 @@ const NavBar = () => {
     setAvatar(user?.avatar);
   }, [user?.name, user?.avatar]);
 
+  // const onSearch = (e) => {
+  //   setSearch(e.target.value);
+  //   dispatch(searchProduct(e.target.value));
+  // };
+
   return (
     <header className="max-w-screen-2xl xl:px-28 px-4 absolute top-0 right-0 left-0">
       <nav className="flex justify-between items-center container md:py-4 pt-6 pb-3">
@@ -54,12 +62,9 @@ const NavBar = () => {
           <div className="relative w-full items-center mx-auto max-w-screen-sm">
             <div className="relative group/bouton w-full py-2">
               <div className="flex items-center gap-2 hover:text-orange-500 cursor-pointer">
-                <a
-                  href="#"
-                  className="text-Black w-5 h-5 cursor-pointer hidden md:block  hover:text-orange-500"
-                >
+                <span className="text-Black w-5 h-5 cursor-pointer hidden md:block  hover:text-orange-500">
                   <FaSearch />
-                </a>
+                </span>
               </div>
               <div className="absolute bg-transparent top-full origine-top opacity-0 hidden flex-col group-hover/bouton:flex group-hover/bouton:opacity-100 transition-all">
                 <div className="relative flex justify-between items-center w-full border-b border-stone-200 py-2 px-2">
@@ -83,10 +88,13 @@ const NavBar = () => {
           </div>
         </div>
 
-        <a href="/">
+        <Link
+          to={"/"}
+          // href="/"
+        >
           {/* {logo} */}
           <img src={logo} alt="" width={150} />
-        </a>
+        </Link>
         {/* {Login and cart btn} */}
 
         <div className="text-lg text-Black sm:flex items-center gap-4 hidden">
@@ -95,72 +103,80 @@ const NavBar = () => {
               <div className="relative group/bouton w-full py-2">
                 <div className="flex items-center gap-2 hover:text-orange-500 cursor-pointer text-nowrap">
                   {/* <FaUser /> */}
-                  <button className="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
+                  <button className="realtive z-10 w-10 h-10 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
                     <img src={avatar} alt="Avatar" />
                   </button>
-                  <span className="hover:border-b-2 hover:border-b-orange-500">
-                    {userName || user?.email || "User"}
-                  </span>
                 </div>
-                <div className="absolute bg-orange-500 top-full origine-top opacity-0 hidden flex-col group-hover/bouton:flex group-hover/bouton:opacity-100 transition-all ml-14">
+                <div className="absolute bg-orange-500 top-full origine-top opacity-0 hidden flex-col group-hover/bouton:flex group-hover/bouton:opacity-100 transition-all">
                   <div className="relative flex justify-between items-center w-full border-b border-stone-200 py-2 px-2">
                     <div className="flex items-center gap-3">
-                      <a
-                        href="/profile"
-                        className="block text-white hover:border-b-2 hover:border-b-white"
+                      <Link
+                        to={"/profile"}
+                        // href="/profile"
+                        className="block text-white text-sm hover:border-b-2 hover:border-b-white text-nowrap"
                       >
-                        Profile
-                      </a>
+                        <span className="text-sm hover:border-b-2 hover:border-b-orange-500">
+                          {userName || user?.email}
+                        </span>
+                      </Link>
                     </div>
                   </div>
                   <div className="relative flex justify-between items-center w-full border-b border-stone-200 py-2 px-2">
                     <div className="flex items-center gap-3">
-                      <a
+                      <Link
                         onClick={handleLogout}
-                        href=""
-                        className="block text-white hover:border-b-2 hover:border-b-white"
+                        className="block text-white text-sm hover:border-b-2 hover:border-b-white"
                       >
                         Logout
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           ) : (
-            <a
-              href="/login"
+            <Link
+              to={"/login"}
+              // href="/login"
               className="flex items-center gap-2 hover:text-orange-500 cursor-pointer"
             >
               <FaUser />
               <span className="hover:border-b-2 hover:border-b-orange-500">
                 Login
               </span>
-            </a>
+            </Link>
           )}
 
           <div className="relative w-full items-center mx-auto max-w-screen-sm">
             <div className="relative group/bouton w-full py-2">
               <div className="flex items-center gap-2 hover:text-orange-500 cursor-pointer">
-                <a
-                  href="/cart"
+                <Link
+                  to={"/cart"}
+                  // href="/cart"
                   className="flex items-center gap-2  hover:text-orange-500"
                 >
-                  <FaCartShopping />
-                  <span className="hover:border-b-2 hover:border-b-orange-500">
+                  <div className="relative scale-75">
+                    <FaCartShopping className="size-8" />
+                    <span className="absolute -top-3 left-4 rounded-full bg-red-500 p-0.5 px-2 text-sm text-red-50">
+                      {order?.orderItems?.length}
+                    </span>
+                  </div>
+
+                  {/* <span className="hover:border-b-2 hover:border-b-orange-500">
                     Cart
-                  </span>
-                </a>
+                  </span> */}
+                </Link>
               </div>
               <div className="absolute bg-orange-500 top-full origine-top opacity-0 hidden flex-col group-hover/bouton:flex group-hover/bouton:opacity-100 transition-all">
                 <div className="relative flex justify-between items-center w-full border-b border-stone-200 py-2 px-2">
                   <div className="flex items-center gap-3">
-                    <a
-                      href=""
+                    <Link
+                      to={"/order"}
+                      state={{ id: user?.id, token: user?.access_token }}
                       className="block text-white text-base hover:border-b-2 hover:border-b-white"
                     >
                       Orders
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -185,7 +201,7 @@ const NavBar = () => {
 
       {/* {Category items} */}
       <div className="py-4">
-        <ul className="lg:flex items-center  justify-between text-Black hidden">
+        <ul className="lg:flex items-center font-serif justify-between text-Black hidden">
           {navItems.map(({ title, path }) => (
             <li
               key={title}
@@ -199,7 +215,7 @@ const NavBar = () => {
       {/* only moblie more items */}
       <div>
         <ul
-          className={`bg-Black text-white px-4 py-2 rounded ${isMenuOpen ? "" : "hidden"}`}
+          className={`bg-Black text-white font-serif px-4 py-2 rounded ${isMenuOpen ? "" : "hidden"}`}
         >
           {navItems.map(({ title, path }) => (
             <li

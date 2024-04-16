@@ -6,9 +6,9 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   return (
-    <div>
+    <>
       <SingleProduct idProduct={id} />
-    </div>
+    </>
   );
 };
 

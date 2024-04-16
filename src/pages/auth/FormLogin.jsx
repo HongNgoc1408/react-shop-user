@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/UserService";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
@@ -12,6 +12,7 @@ const FormLogin = () => {
   const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -24,8 +25,13 @@ const FormLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     const res = await loginUser(data);
+    // console.log("location", location);
     if (res.status === "OK") {
-      navigate("/");
+      if (location?.state) {
+        navigate(location?.state);
+      } else {
+        navigate("/");
+      }
       localStorage.setItem("access_token", JSON.stringify(res?.access_token));
       if (res?.access_token) {
         const decoded = jwtDecode(res?.access_token);
@@ -113,7 +119,7 @@ const FormLogin = () => {
             disabled={!email.length || !password.length}
             className="bg-dark-button  disabled:bg-gray-400 disabled:cursor-no-drop"
           >
-            Log in
+            <span className="relative z-10">Log in</span>
           </button>
         </div>
 

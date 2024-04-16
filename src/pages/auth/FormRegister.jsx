@@ -52,7 +52,7 @@ const FormRegister = () => {
           </div>
         </div>
       )}
-      
+
       <form className="max-w-[555px] h-auto bg-white m-auto mt-32 px-14 py-10 rounded-md">
         <h3 className="title">PERSONAL INFORMATION</h3>
         <div className="w-full flex flex-col">
@@ -138,7 +138,7 @@ const FormRegister = () => {
             onClick={handleRegister}
             className="bg-dark-button disabled:bg-gray-400 disabled:cursor-no-drop"
           >
-            Create account
+            <span className="relative z-10">Create account</span>
           </button>
         </div>
 

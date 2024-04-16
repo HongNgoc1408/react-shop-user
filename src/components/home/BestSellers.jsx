@@ -9,8 +9,6 @@ import "swiper/css/navigation";
 
 // import required modules
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import * as ProductService from "../../services/ProductService";
 import Cards from "../product/Cards";
 
@@ -44,6 +42,7 @@ const BestSellers = () => {
           together to achieve positive results for everyone.
         </p>
       </div>
+
       {/* best seller product */}
 
       <div className="mb-16">
@@ -79,21 +78,21 @@ const BestSellers = () => {
           {filteredBestSellers?.map((product) => {
             return (
               <SwiperSlide key={product._id}>
-                <Cards
-                  key={product._id}
-                  id={product._id}
-                  countInStock={product.countInStock}
-                  description={product.description}
-                  image={product.image}
-                  name={product.name}
-                  price={product.price}
-                  type={product.type}
-                />
+                <div className="pb-10">
+                  <Cards
+                    key={product._id}
+                    id={product._id}
+                    countInStock={product.countInStock}
+                    description={product.description}
+                    image={product.image}
+                    name={product.name}
+                    price={product.price}
+                    type={product.type}
+                  />
+                </div>
               </SwiperSlide>
             );
           })}
-          {/* ),
-           ),} */}
         </Swiper>
       </div>
     </div>
