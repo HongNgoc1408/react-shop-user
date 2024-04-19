@@ -5,7 +5,7 @@ import * as UserService from "../../services/UserService";
 import * as OrderService from "../../services/OrderService";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { removeAllOrderProduct } from "../../redux/slides/orderSlide";
-// import { element } from "prop-types";
+import { useLocation } from "react-router-dom";
 
 const FormCheckout = () => {
   const [successNotification, setSuccessNotification] = useState(null);
@@ -13,6 +13,8 @@ const FormCheckout = () => {
   const navigate = useNavigate();
   const order = useSelector((state) => state.order);
   const user = useSelector((state) => state.user);
+  // const location = useLocation();
+  // console.log(location);
   const dispatch = useDispatch();
   const [name, setName] = useState(user?.name);
   const [phone, setPhone] = useState(user?.phone);
@@ -113,14 +115,17 @@ const FormCheckout = () => {
         });
         dispatch(removeAllOrderProduct({ listChecked: arrayOrder }));
         setSuccessNotification("Add order successful!");
+
         setTimeout(() => {
           setSuccessNotification(null);
-          navigate("/order");
         }, 1500);
         setIsOpenModalUpdateInfo(false);
+        navigate("/order", {
+          state: { id: user?.id, token: user?.access_token },
+        });
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrorNotification("Add order failed!" + error);
       setTimeout(() => {
         setErrorNotification(null);

@@ -40,16 +40,31 @@ export const getAllOrderByUserId = async (id, access_token) => {
   return res.data;
 };
 
-export const cancelOrder = async (id, access_token, orderItems) => {
+// export const cancelOrder = async (id, access_token, orderItems) => {
+//   const res = await axiosJWT.delete(
+//     `/order/cancel-order/${id}`,
+//     {
+//       headers: {
+//         token: `Bearer ${access_token}`,
+//       },
+//       data: orderItems,
+//     }
+//   );
+//   return res.data;
+// };
+
+export const cancelOrder = async (id, access_token, orderItems, userId) => {
+  const data = { orderItems, orderId: id };
   const res = await axiosJWT.delete(
-    `/order/cancel-order/${id}`,
+    `/order/cancel-order/${userId}`,
+    { data },
     {
       headers: {
         token: `Bearer ${access_token}`,
       },
-      data: orderItems,
     }
   );
+  console.log("res.data", res.data);
   return res.data;
 };
 
@@ -60,4 +75,14 @@ export const getAllOrder = async (access_token) => {
     },
   });
   return res.data;
+};
+
+export const updateOrder = async (id, isDelivered) => {
+  try {
+    const res = await axiosJWT.put(`/order/update/${id}`, { isDelivered });
+    return res.data;
+  } catch (error) {
+    console.error("Error updating order:", error);
+    throw error;
+  }
 };

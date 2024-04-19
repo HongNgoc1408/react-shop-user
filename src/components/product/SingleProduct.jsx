@@ -46,17 +46,6 @@ const SingleProduct = () => {
     if (!user?.id) {
       navigate("/login", { state: location?.pathname });
     } else {
-      // {
-      //   name: { type: String, required: true },
-      //   amount: { type: Number, required: true },
-      //   image: { type: String, required: true },
-      //   price: { type: Number, required: true },
-      //   product: {
-      //     type: mongoose.Schema.Types.ObjectId,
-      //     ref: "Product",
-      //     required: true,
-      //   },
-      // },
       dispatch(
         addOrderProduct({
           orderItem: {
@@ -129,24 +118,24 @@ const SingleProduct = () => {
                         />
                       </div>
                       <div className="flex flex-col w-4/12">
-                        <button className="text-white rounded-tr-md px-1 bg-gray-800 focus:bg-orange-500 focus:outline-none border border-gray-800 focus:border-orange-500">
-                          <FaSortUp
-                            onClick={() =>
-                              handleChangeCount(
-                                "increase",
-                                numProduct === product?.countInStock
-                              )
-                            }
-                            className="text-center mx-auto size-5"
-                          />
+                        <button
+                          onClick={() =>
+                            handleChangeCount(
+                              "increase",
+                              numProduct === product?.countInStock
+                            )
+                          }
+                          className="text-white rounded-tr-md px-1 bg-gray-800 focus:bg-orange-500 focus:outline-none border border-gray-800 focus:border-orange-500"
+                        >
+                          <FaSortUp className="text-center mx-auto size-5" />
                         </button>
-                        <button className="text-white rounded-br-md px-1 bg-gray-800 focus:bg-orange-500 focus:outline-none border border-gray-800 focus:border-orange-500">
-                          <FaSortDown
-                            onClick={() =>
-                              handleChangeCount("decrease", numProduct === 1)
-                            }
-                            className="text-center mx-auto size-5"
-                          />
+                        <button
+                          onClick={() =>
+                            handleChangeCount("decrease", numProduct === 1)
+                          }
+                          className="text-white rounded-br-md px-1 bg-gray-800 focus:bg-orange-500 focus:outline-none border border-gray-800 focus:border-orange-500"
+                        >
+                          <FaSortDown className="text-center mx-auto size-5" />
                         </button>
                       </div>
                     </div>

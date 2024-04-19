@@ -39,7 +39,7 @@ const NavBar = () => {
         "access_token",
         JSON.stringify(res?.access_token)
       );
-      navigate("/");
+      window.location.reload();
     } else {
       alert("Error: " + res.message);
     }

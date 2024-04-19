@@ -6,13 +6,15 @@ import { useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const AccordionOrder = () => {
   const [successNotification, setSuccessNotification] = useState(null);
   const [errorNotification, setErrorNotification] = useState(null);
   const location = useLocation();
   const { state } = location;
-
+  const user = useSelector((state) => state.user);
+  console.log(user);
   const fetchOrder = async () => {
     try {
       const res = await OrderService.getAllOrderByUserId(
@@ -37,19 +39,17 @@ const AccordionOrder = () => {
 
   const handleCancelOrder = async (order) => {
     try {
-      console.log("OOOOO", order._id);
-
       const res = await OrderService.cancelOrder(
-        order._id,
+        order?._id,
         state?.token,
-        order?.orderItems
+        order?.orderItems,
+        user?.id
       );
-
+      queryOrder.refetch();
       setSuccessNotification("Order canceled successfully!");
       setTimeout(() => {
         setSuccessNotification(null);
       }, 3000);
-      queryOrder.refetch();
     } catch (error) {
       setErrorNotification("Failed to cancel order");
       setTimeout(() => {
@@ -96,7 +96,7 @@ const AccordionOrder = () => {
           <>
             <div
               key={order?._id}
-              className="w-10/12 flex flex-wrap justify-start overflow-hidden bg-Black text-white border border-white mx-auto "
+              className="w-full flex flex-wrap justify-start overflow-hidden bg-Black text-white border border-white mx-auto "
             >
               <label className="grow px-4 py-3 font-medium" htmlFor={index}>
                 <div className="flex justify-between font-semibold text-nowrap">
@@ -112,16 +112,16 @@ const AccordionOrder = () => {
                 </div>
                 <div className="flex justify-between font-semibold text-nowrap">
                   <p className="text-orange-500 font-bold">Status Delivery</p>
-                  <p className="text-white">
-                    {order?.isDelivered
-                      ? "Shipped successfully"
-                      : "Not shipped yet"}
+                  <p
+                    className={` ${order?.isDelivered === "Cancelled" ? "text-orange-500" : "text-white"}`}
+                  >
+                    {order?.isDelivered}
                   </p>
                 </div>
                 <div className="flex justify-between font-semibold text-nowrap">
                   <p className="text-orange-500 font-bold">Status Payment</p>
 
-                  <p className="text-white">
+                  <p className={` ${order?.isPaid ? "text-orange-500" : "text-white"}`}>
                     {order?.isPaid
                       ? "Payment has been successful"
                       : "Payment has not been successful"}
@@ -130,7 +130,8 @@ const AccordionOrder = () => {
                 <div className="flex justify-end font-semibold text-nowrap">
                   <button
                     onClick={() => handleCancelOrder(order)}
-                    className="bg-light-button my-4"
+                    className={`bg-light-button my-4 ${order?.isDelivered !== "Wait for confirmation" ? "bg-gray-500 cursor-not-allowed" : ""}`}
+                    disabled={order?.isDelivered !== "Wait for confirmation"}
                   >
                     <span className="relative z-10">Cancel Order</span>
                   </button>
