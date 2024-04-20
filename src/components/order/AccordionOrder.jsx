@@ -121,7 +121,9 @@ const AccordionOrder = () => {
                 <div className="flex justify-between font-semibold text-nowrap">
                   <p className="text-orange-500 font-bold">Status Payment</p>
 
-                  <p className={` ${order?.isPaid ? "text-orange-500" : "text-white"}`}>
+                  <p
+                    className={` ${order?.isPaid ? "text-orange-500" : "text-white"}`}
+                  >
                     {order?.isPaid
                       ? "Payment has been successful"
                       : "Payment has not been successful"}

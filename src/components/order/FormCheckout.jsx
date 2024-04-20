@@ -205,6 +205,7 @@ const FormCheckout = () => {
                         <td className="px-6 py-4 font-semibold text-orange-500">
                           ${order?.price}
                         </td>
+                        
                         <td className="px-6 py-4 font-semibold text-Black cursor-pointer">
                           {order?.amount}
                         </td>

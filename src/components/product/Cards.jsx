@@ -5,8 +5,20 @@ import { FaCartShopping } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 
 const Cards = (props) => {
-  const { countInStock, description, image, name, price, type, id } = props;
-  
+  const {
+    discount,
+    rating,
+    seller,
+    status,
+    countInStock,
+    description,
+    image,
+    name,
+    price,
+    type,
+    id,
+    discountPrice = (price * discount) / 100,
+  } = props;
   if (countInStock === 0) {
     return null;
   }
@@ -29,7 +41,21 @@ const Cards = (props) => {
             </h4>
             <div className="flex justify-between mb-1">
               <p className="text-black/50">{type}</p>
-              <p className="font-semibold hover:text-orange-500">${price}</p>
+              <span className="flex">
+                <p className="text-red-500 font-semibold">
+                  {discount ? (
+                    <del className="text-gray-500">${price}</del>
+                  ) : (
+                    `$${price}`
+                  )}
+                </p>
+                {discount && (
+                  <p className="text-red-500 font-semibold ml-2">
+                    ${price - discountPrice}
+                  </p>
+                )}
+              </span>
+              {/* <p className="font-semibold hover:text-orange-500">${price}</p> */}
             </div>
             <div className="flex justify-between mb-1">
               <p className="text-black/50 text-sm truncate">{description}</p>

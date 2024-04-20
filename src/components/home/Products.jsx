@@ -3,11 +3,26 @@ import { FaFilter } from "react-icons/fa";
 import Cards from "../product/Cards";
 import { useQuery } from "@tanstack/react-query";
 import * as ProductService from "../../services/ProductService";
+import * as TypeService from "../../services/TypeService";
 
 const Products = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortOption, setSortOption] = useState("default");
+  const [type, setType] = useState([]);
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const response = await TypeService.getAllType();
+        const typesData = response.data;
+        setType(typesData);
+      } catch (error) {
+        console.error("Error fetching types:", error);
+      }
+    };
+    fetchTypes();
+  }, []);
 
   const fetchProductAll = async () => {
     const res = await ProductService.getAllProduct();
@@ -71,12 +86,15 @@ const Products = () => {
       <div>
         <div className="flex flex-col md:flex-row flex-wrap md:justify-between items-center space-y-3 mb-8">
           {/* All */}
+
           <div className="flex flex-row justify-start md:items-center md:gap-8 gap-4 flex-wrap">
             <button onClick={() => showAll()}>All Products</button>
-            <button onClick={() => filterItems("Dress")}>Dress</button>
-            <button onClick={() => filterItems("Suit")}>Suit</button>
-            <button onClick={() => filterItems("T-shirt")}>T-shirt </button>
-            <button onClick={() => filterItems("Hoodies")}>Hoodies</button>
+            {type.map((item) => (
+              // <option key={item._id} value={item._id}>
+              //   {item.name}
+              // </option>
+              <button key={item._id} value={item._id} onClick={() => filterItems(item.name)}>{item.name}</button>
+            ))}
           </div>
 
           {/* Sort option */}
@@ -112,6 +130,10 @@ const Products = () => {
                 name={product.name}
                 price={product.price}
                 type={product.type}
+                discount={product.discount}
+                rating={product.rating}
+                seller={product.seller}
+                status={product.status}
               />
             );
           })}

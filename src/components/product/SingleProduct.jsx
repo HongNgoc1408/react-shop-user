@@ -13,6 +13,7 @@ const SingleProduct = () => {
   const location = useLocation();
   const [product, setProduct] = useState({});
   const [numProduct, setNumProduct] = useState(1);
+  const [isHidden, setIsHidden] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const SingleProduct = () => {
       try {
         const product = await ProductService.getDetailsProduct(id);
         const data = product?.data;
+        // console.log("data", data);
         setProduct(data);
       } catch (error) {
         console.log("Error fetching data: ", error);
@@ -39,9 +41,20 @@ const SingleProduct = () => {
     }
   };
 
-  const { name, type, price, image, status, countInStock, description } =
-    product;
-
+  const {
+    name,
+    type,
+    price,
+    image,
+    status,
+    discount,
+    rating,
+    countInStock,
+    seller,
+    description,
+  } = product;
+  const discountPrice =
+    isNaN(price) || isNaN(discount) ? 0 : (price * discount) / 100;
   const handleAddOrderProduct = () => {
     if (!user?.id) {
       navigate("/login", { state: location?.pathname });
@@ -52,13 +65,17 @@ const SingleProduct = () => {
             name: product?.name,
             amount: numProduct,
             image: product?.image,
-            price: product?.price,
+            price: product?.price - discountPrice,
             product: product?._id,
             countInStock: product?.countInStock,
           },
         })
       );
     }
+  };
+
+  const toggleHidden = () => {
+    setIsHidden(!isHidden);
   };
 
   return (
@@ -80,23 +97,85 @@ const SingleProduct = () => {
               </div>
 
               {/* product detail */}
-              <div className="w-10/12 mx-auto">
-                <h1 className="title text-left text-nowrap">{name}</h1>
 
-                <p className="mt-3 text-gray-600 text-base leading-6 text-justify sm:text-left sm:mt-4">
+              <div className="w-10/12 mx-auto">
+                <h5 className="text-left text-nowrap text-lg font-serif">
+                  {type}
+                </h5>
+                <h1 className="title my-5 text-left text-nowrap">{name}</h1>
+                <span className="flex">
+                  <h2 className="text-red-500 font-semibold text-2xl mr-5">
+                    {discount ? (
+                      <del className="text-gray-500">${price}</del>
+                    ) : (
+                      `$${price}`
+                    )}
+                  </h2>
+                  {discount && (
+                    <h2 className="text-red-500 font-semibold text-2xl mr-5">
+                      ${price - discountPrice}
+                    </h2>
+                  )}
+                </span>
+
+                <span className="my-2  flex items-center gap-1 sm:my-4">
+                  <span className="flex text-yellow-500 text-xl">
+                    <FaStar />
+                    <FaStar />
+                    <FaStar />
+                    <FaStar />
+                    <FaStar />
+                  </span>
+                  <span className="text-lg font-serif">
+                    || Rating: {rating}
+                  </span>
+                </span>
+                {seller > 0 ? <span className="">Seller: {seller}</span> : ""}
+
+                <p className="mt-3 text-gray-600 text-lg font-serif leading-6 text-justify sm:text-left sm:mt-4">
                   {description}
                 </p>
-                <span className="my-2 text-xl text-yellow-500 flex items-center gap-1 sm:my-4">
-                  <FaStar />
-                  <FaStar />
-                  <FaStar />
-                  <FaStar />
-                  <FaStar />
-                </span>
-                <p className="text-xl text-red-500 font-semibold sm:text-2xl">
-                  {price}
-                </p>
-
+                <div className="border-t border-b py-4 mt-7 text-gray-600 border-gray-200">
+                  <div
+                    data-menu
+                    className="flex justify-between items-center cursor-pointer"
+                    onClick={toggleHidden}
+                  >
+                    <p className="text-lg font-serif leading-4 text-gray-600">
+                      Shipping and returns
+                    </p>
+                    <button
+                      className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
+                      role="button"
+                      aria-label="show or hide"
+                    >
+                      <svg
+                        className={`transform ${isHidden ? "" : "rotate-180"} text-gray-600`}
+                        width="10"
+                        height="6"
+                        viewBox="0 0 10 6"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M9 1L5 5L1 1"
+                          stroke="currentColor"
+                          strokeWidth="1.25"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    className={`pt-4 text-lg font-serif leading-normal pr-12 mt-4 text-gray-600 ${isHidden ? "hidden" : ""}`}
+                    id="sect"
+                  >
+                    You will be responsible for paying for your own shipping
+                    costs for returning your item. Shipping costs are
+                    nonrefundable
+                  </div>
+                </div>
                 <div className="mt-4">
                   <div className="text-left flex flex-col gap-2 w-full">
                     <label className="font-semibold">Quantity</label>
@@ -156,14 +235,6 @@ const SingleProduct = () => {
         ) : (
           <div>Loading ...</div>
         )}
-        <div className="text-black/75 mt-12">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae
-            excepturi in molestias deserunt inventore illum aut expedita, amet
-            voluptatem impedit, eius quos ratione culpa doloribus, sequi minus
-            consequuntur neque beatae!
-          </p>
-        </div>
       </div>
     </div>
   );
