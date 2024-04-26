@@ -25,7 +25,7 @@ const FormRegister = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     const res = await createUser(data);
-    console.log(res.message);
+    // console.log(res.message);
     if (res.status === "OK") {
       navigate("/login");
     } else {
@@ -62,7 +62,6 @@ const FormRegister = () => {
               onChange={(e) => setName(e.target.value)}
               type="text"
               placeholder="Name"
-              autoComplete="name"
               autoFocus
               className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
             />
@@ -91,7 +90,6 @@ const FormRegister = () => {
               onChange={(e) => setPassword(e.target.value)}
               type={isShowPassword ? "text" : "password"}
               placeholder="Password"
-              autoComplete="password"
               className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
             />
           </div>
@@ -116,14 +114,14 @@ const FormRegister = () => {
         </div>
 
         <div className="w-full flex items-center">
-          <input type="checkbox" className="w-4 h-4 mr-2" />
+          <input checked type="checkbox" className="w-4 h-4 mr-2" />
           <p className="text-sm">
             I want to receive Zara&apos;s newsletter via email
           </p>
         </div>
 
         <div className="w-full flex items-center">
-          <input type="checkbox" className="w-4 h-4 mr-2" />
+          <input checked type="checkbox" className="w-4 h-4 mr-2" />
           <p className="text-sm">I accept the privacy statement</p>
         </div>
 

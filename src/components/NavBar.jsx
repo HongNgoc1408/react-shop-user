@@ -73,7 +73,9 @@ const NavBar = () => {
           <div className="relative w-full items-center mx-auto max-w-screen-sm">
             <div className="relative group/bouton w-full py-2">
               <div className="flex items-center gap-2 hover:text-orange-500 cursor-pointer">
-                <FaSearch />
+                <Link to={"/search"}>
+                  <FaSearch />
+                </Link>
               </div>
               <div className="absolute bg-transparent top-full origine-top opacity-0 hidden flex-col group-hover/bouton:flex group-hover/bouton:opacity-100 transition-all">
                 <div className="relative flex justify-between items-center w-full border-b border-stone-200 py-2 px-2">
