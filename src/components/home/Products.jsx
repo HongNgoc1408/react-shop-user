@@ -90,10 +90,13 @@ const Products = () => {
           <div className="flex flex-row justify-start md:items-center md:gap-8 gap-4 flex-wrap">
             <button onClick={() => showAll()}>All Products</button>
             {type.map((item) => (
-              // <option key={item._id} value={item._id}>
-              //   {item.name}
-              // </option>
-              <button key={item._id} value={item._id} onClick={() => filterItems(item.name)}>{item.name}</button>
+              <button
+                key={item._id}
+                value={item._id}
+                onClick={() => filterItems(item.name)}
+              >
+                {item.name}
+              </button>
             ))}
           </div>
 

@@ -9,6 +9,9 @@ import WomenPage from "../pages/home/WomenPage";
 import Checkout from "../pages/order/Checkout";
 import BestSellerPage from "../pages/home/BestSellerPage";
 import Order from "../pages/order/Order";
+import SearchPage from "../pages/home/SearchPage";
+import NewPage from "../pages/home/NewPage";
+import SalePage from "../pages/home/SalePage";
 
 const routes = [
   {
@@ -37,6 +40,16 @@ const routes = [
     page: BestSellerPage,
   },
   {
+    path: "/new",
+    name: "New",
+    page: NewPage,
+  },
+  {
+    path: "/sale",
+    name: "Sale",
+    page: SalePage,
+  },
+  {
     path: "/profile",
     name: "profile",
     page: ProfilePage,
@@ -60,6 +73,11 @@ const routes = [
     path: "/order",
     name: "order",
     page: Order,
+  },
+  {
+    path: "/search",
+    name: "search",
+    page: SearchPage,
   },
   {
     path: "*",

@@ -8,15 +8,12 @@ const Banner = ({ title, description, link }) => {
     <div className="bg-primaryBG py-12 xl:px-28 px-4 pb-5">
       <div className="py-28 pb-5 flex flex-col md:flex-row-reverse justify-between items-center gap-14">
         {/* img */}
-        <div className="md:w-1/2">
-          <img src={bannerImg} alt="" className="w-96" />
+        <div className="md:w-1/3">
+          <img src={bannerImg} alt="" className="w-96 mt-5" />
         </div>
-        <div className="md:w-1/2">
+        <div className="md:w-2/3">
           <h1 className="text-5xl font-light mb-5 uppercase">{title}</h1>
-          <p className="text-xl mb-7">
-            {description}
-            
-          </p>
+          <p className="text-xl mb-7">{description}</p>
           <button className="bg-dark-button">
             <Link to={link} className="relative z-10">
               Shop now

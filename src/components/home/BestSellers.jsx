@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-// Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
-// import required modules
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import * as ProductService from "../../services/ProductService";
 import Cards from "../product/Cards";
@@ -88,6 +83,10 @@ const BestSellers = () => {
                     name={product.name}
                     price={product.price}
                     type={product.type}
+                    discount={product.discount}
+                    rating={product.rating}
+                    seller={product.seller}
+                    status={product.status}
                   />
                 </div>
               </SwiperSlide>

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import * as ProductService from "../../services/ProductService";
 import Cards from "./Cards";
 
-const ProductBestSellers = () => {
-  const [filteredBestSellers, setFilteredBestSellers] = useState([]);
+const ProductSale = () => {
+  const [filteredSale, setFilteredSale] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -11,9 +11,7 @@ const ProductBestSellers = () => {
       try {
         const res = await ProductService.getAllProduct();
         setProducts(res.data);
-        setFilteredBestSellers(
-          res.data.filter((item) => item.status === "Best Sellers")
-        );
+        setFilteredSale(res.data.filter((item) => item.status === "Sale"));
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -25,13 +23,13 @@ const ProductBestSellers = () => {
   return (
     <div className="max-w-screen-2xl container mx-auto xl:px-28 px-4 mb-12">
       <div className="text-center">
-        <h2 className="title">Best sellers</h2>
+        <h2 className="title">Sale</h2>
       </div>
 
       {/* best seller product */}
 
       <div className="grid xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 items-center justify-center gap-12 shadow-sm">
-        {filteredBestSellers?.map((product) => {
+        {filteredSale?.map((product) => {
           return (
             <Cards
               key={product._id}
@@ -54,4 +52,4 @@ const ProductBestSellers = () => {
   );
 };
 
-export default ProductBestSellers;
+export default ProductSale;
