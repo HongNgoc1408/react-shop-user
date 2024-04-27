@@ -30,7 +30,7 @@ const NewLetters = () => {
       {/* newsletters */}
       <div>
         <h2 className="title">Or subscribe to the newsletter</h2>
-        <form className="md:w-1/2 mx-auto text-center">
+        <form className="md:w-1/2 mx-auto text-center flex">
           <input
             type="email"
             name="email"
@@ -42,7 +42,7 @@ const NewLetters = () => {
           <button
             type="submit"
             value={"Submit"}
-            className="bg-black text-white bg-dark-button"
+            className="bg-black text-white bg-dark-button rounded-none mb-10"
           >
             <span className=" relative z-10">Submit</span>
           </button>
